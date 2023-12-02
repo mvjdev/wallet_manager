@@ -1,0 +1,8 @@
+openapi: 3.0.3
+info:
+  title: Wallet manager
+  description: Wallet manager
+  version: 1.0.0
+servers:
+  - url: 'https://www.wallet_manager.com'
+paths:
