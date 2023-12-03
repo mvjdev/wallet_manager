@@ -29,3 +29,29 @@ components:
       properties:
         id:
           type: integer
+    # user components
+    user_setter:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        currency_id:
+          $ref: '#/components/schemas/currency'
+      required:
+        - password
+        - currency_id
+    user:
+      type: object
+      items:
+        $ref: '#/components/schemas/user_setter'
+      properties:
+        id:
+          type: integer
