@@ -6,3 +6,7 @@ info:
 servers:
   - url: 'https://www.wallet_manager.com'
 paths:
+  /user:
+  /bank_account:
+  /currency:
+  /transaction:
