@@ -10,3 +10,22 @@ paths:
   /bank_account:
   /currency:
   /transaction:
+components:
+  schemas:
+    # currency components
+    currency_setter:
+      type: object
+      properties:
+        name:
+          type: string
+        country:
+          type: string
+      required:
+        - name
+    currency:
+      type: object
+      items:
+        $ref: '#/components/schemas/currency_setter'
+      properties:
+        id:
+          type: integer
