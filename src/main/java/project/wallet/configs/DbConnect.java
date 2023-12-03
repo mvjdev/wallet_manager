@@ -3,7 +3,7 @@ package project.wallet.configs;
 import java.sql.*;
 
 public class DbConnect {
-  private static final Connection connection;
+  protected static final Connection CONNECTION;
 
   private static String URL = "jdbc:postgresql://localhost:5432/wallet";
   private static String USER = "prog_admin";
@@ -23,13 +23,9 @@ public class DbConnect {
 
   static {
     try {
-      connection = DriverManager.getConnection(URL, USER, PASSWORD);
+      CONNECTION = DriverManager.getConnection(URL, USER, PASSWORD);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  public static Connection connect(){
-    return connection;
   }
 }
