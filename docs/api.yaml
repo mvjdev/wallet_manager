@@ -55,6 +55,9 @@ components:
       properties:
         id:
           type: integer
+        creation_timestamp:
+          type: string
+          format: 'date-time'
     # account components
     account_setter:
       type: object
