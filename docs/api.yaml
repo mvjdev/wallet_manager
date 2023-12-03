@@ -80,3 +80,11 @@ components:
         creation_timestamp:
           type: string
           format: 'date-time'
+    # transaction components
+    transaction_tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
