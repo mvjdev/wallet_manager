@@ -1,4 +1,4 @@
--- devise to set on a user account (one per account)
+-- money devise to set on an account (one per account)
 create table if not exists "currency" (
     id bigserial primary key,
     name varchar(100) not null,
