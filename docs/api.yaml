@@ -55,3 +55,28 @@ components:
       properties:
         id:
           type: integer
+    # account components
+    account_setter:
+      type: object
+      properties:
+        name:
+          type: string
+        current_amount:
+          type: number
+          format: double
+        type: # account type
+          type: string
+        account_number:
+          type: string
+        user_id:
+          $ref: '#/components/schemas/user'
+    account:
+      type: object
+      items:
+        $ref: '#/components/schemas/account_setter'
+      properties:
+        id:
+          type: integer
+        creation_timestamp:
+          type: string
+          format: 'date-time'
