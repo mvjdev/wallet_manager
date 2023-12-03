@@ -6,7 +6,6 @@ info:
 servers:
   - url: 'https://www.wallet_manager.com'
 paths:
-  /user:
   /bank_account:
   /currency:
   /transaction:
@@ -29,35 +28,6 @@ components:
       properties:
         id:
           type: integer
-    # user components
-    user_setter:
-      type: object
-      properties:
-        firstname:
-          type: string
-        lastname:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        currency_id:
-          $ref: '#/components/schemas/currency'
-      required:
-        - password
-        - currency_id
-    user:
-      type: object
-      items:
-        $ref: '#/components/schemas/user_setter'
-      properties:
-        id:
-          type: integer
-        creation_timestamp:
-          type: string
-          format: 'date-time'
     # account components
     account_setter:
       type: object
@@ -71,8 +41,8 @@ components:
           type: string
         account_number:
           type: string
-        user_id:
-          $ref: '#/components/schemas/user'
+        currency_id:
+          type: integer
     account:
       type: object
       items:
@@ -83,6 +53,8 @@ components:
         creation_timestamp:
           type: string
           format: 'date-time'
+        currency_id:
+          $ref: '#/components/schemas/currency'
     # transaction components
     transaction_tag:
       type: object
