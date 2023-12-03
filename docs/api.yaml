@@ -88,3 +88,9 @@ components:
           type: integer
         name:
           type: string
+    transaction_type:
+      type: object
+      enum:
+        - transfer
+        - claim
+        - spend
