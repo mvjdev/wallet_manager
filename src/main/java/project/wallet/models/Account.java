@@ -8,6 +8,6 @@ public class Account {
   private Double currentAmount;
   private String type;
   private String accountNumber;
-  private User userId;
+  private Currency currencyId;
   private Instant creationTimestamp;
 }
