@@ -94,3 +94,38 @@ components:
         - transfer
         - claim
         - spend
+    transaction:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        type:
+          $ref: '#/components/schemas/transaction_type'
+    transaction_setter:
+      type: object
+      items:
+        $ref: '#/components/schemas/transaction'
+      properties:
+        tag_id:
+          type: integer
+        transfer_to:
+          type: integer
+        account_id:
+          type: integer
+    transaction_getter:
+      type: object
+      items:
+        $ref: '#/components/schemas/transaction'
+      properties:
+        id:
+          type: integer
+        tag_id:
+          $ref: '#/components/schemas/transaction_tag'
+        transfer_to:
+          $ref: '#/components/schemas/account'
+        account_id:
+          $ref: '#/components/schemas/account'
+        creation_timestamp:
+          type: string
+          format: 'date-time'
