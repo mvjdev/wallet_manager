@@ -45,6 +45,116 @@ public class TransactionCrudUtils {
     System.out.printf("transfer transaction done: %d;", updates);
   }
 
+  public static Transaction complicatedSaving(Transaction input, Connection connection){
+    Objects.requireNonNull(input);
+
+    try {
+      Account account = input.getAccountId(); // account for a transaction is required
+      Objects.requireNonNull(account);
+      Long accountId = account.getId();
+      Objects.requireNonNull(accountId); // the id of the account is the required key
+
+      String sql;
+      boolean simpleSave = true;
+      if(input.getId() == null){
+        sql = """
+        insert into "transaction" (tag_id, amount, type, transfer_to, account_id)
+        values (?, ?, ?::transaction_type, ?, ?)
+        returning id;
+        """;
+      }else {
+        simpleSave = false;
+        sql = """
+        insert into "transaction" (id, tag_id, amount, type, transfer_to, account_id)
+        values (?, ?, ?, ?::transaction_type, ?, ?)
+        on conflict (id)
+            do update
+            set id = ?,
+                tag_id = ?,
+                amount = "transaction".amount + ?,
+                type = ?::transaction_type,
+                transfer_to = ?,
+                account_id = ?
+        returning id;
+        """;
+      }
+
+      Long tag = null;
+      TransactionTag transactionTag = input.getTagId();
+      if(
+        transactionTag != null &&
+        transactionTag.getId() != null &&
+        transactionTag.getId() >= 0
+      ) tag = transactionTag.getId();
+
+      double amount = input.getAmount();
+      String type = "claim";
+      TransactionType transactionType = input.getType();
+      if(transactionType != null){
+          type = transactionType
+            .toString()
+            .toLowerCase();
+      }
+
+      Long transferTo = null;
+      Account transferToAccount = input.getTransferTo();
+      if(
+        transferToAccount != null &&
+        transferToAccount.getId() != null
+      ) transferTo = transferToAccount.getId();
+
+      switch (type) {
+        case "claim" -> amount =   Math.abs(amount);
+        case "spend" -> amount = - Math.abs(amount);
+        case "transfer" -> doTransferToAccount(input, connection);
+      }
+
+      PreparedStatement statement = connection.prepareStatement(sql);
+      if(simpleSave){
+        if(tag != null)
+          statement.setLong(1, tag);
+
+        if(transferTo != null)
+          statement.setLong(4, transferTo);
+
+        statement.setDouble(2, amount);
+        statement.setString(3, type);
+        statement.setLong(5, accountId);
+      }else {
+        Long id = input.getId();
+        Objects.requireNonNull(id); // required a non null id
+        statement.setLong(1, id);
+
+        if(tag != null){
+          statement.setLong(2, tag);
+          statement.setLong(8, tag);
+        }
+
+        if(transferTo != null){
+          statement.setLong(5, transferTo);
+          statement.setLong(11, transferTo);
+        }
+
+        statement.setDouble(3, amount);
+        statement.setString(4, type);
+        statement.setLong(6, accountId);
+        statement.setLong(7, id);
+        statement.setDouble(9, amount);
+        statement.setString(10, type);
+        statement.setLong(12, accountId);
+      }
+
+      ResultSet result = statement.executeQuery();
+      if (result.next()) {
+        Long returnedId = result.getLong("id");
+        return findOne(returnedId, connection);
+      }
+    }catch (Exception e){
+      throw new RuntimeException(e);
+    }
+    return null;
+  }
+
   public static Transaction findOne(Long id, Connection connection) throws SQLException {
     String sql = FIND_ALL + " where transaction.id = ?;";
 
