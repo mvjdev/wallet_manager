@@ -28,4 +28,15 @@ public class AccountCrudUtils {
       .setCurrencyId(currency)
     ;
   }
+
+  public static Account findOne(Long id, Connection connection) throws SQLException {
+    String sql = "select * from \"account\" full outer join currency c on c.id = account.currency_id where \"account\".id = ?;";
+    PreparedStatement statement = connection.prepareStatement(sql);
+    statement.setLong(1, id);
+
+    ResultSet result = statement.executeQuery();
+    if(result.next())
+      return parseFindingAccount(result);
+    return null;
+  }
 }
