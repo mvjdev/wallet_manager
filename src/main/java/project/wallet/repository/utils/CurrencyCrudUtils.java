@@ -15,4 +15,15 @@ public class CurrencyCrudUtils {
       .setName(resultSet.getString("name"))
       .setCountry(resultSet.getString("country"));
   }
+
+  public static Currency findOne(Long id, Connection connection) throws SQLException {
+    String sql = "select * from \"currency\" where id = ?;";
+    PreparedStatement statement = connection.prepareStatement(sql);
+    statement.setLong(1, id);
+
+    ResultSet result = statement.executeQuery();
+    if(result.next())
+      return parseFindingCurrency(result);
+    return null;
+  }
 }
