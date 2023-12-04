@@ -13,6 +13,18 @@ public class TransactionCrudUtils {
     full join currency c on c.id = a.currency_id
     full join currency c2 on c2.id = a2.currency_id""";
   public static String DELETE = "delete from \"transaction\" where id = ?;";
+
+  public static Transaction findOne(Long id, Connection connection) throws SQLException {
+    String sql = FIND_ALL + " where transaction.id = ?;";
+
+    PreparedStatement statement = connection.prepareStatement(sql);
+    statement.setLong(1, id);
+    ResultSet result = statement.executeQuery();
+    if(result.next())
+      return parseFinding(result);
+    return null;
+  }
+
   public static Transaction parseFinding(ResultSet result) throws SQLException {
     Transaction transaction = new Transaction();
     TransactionTag tag = new TransactionTag()
