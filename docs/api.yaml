@@ -10,6 +10,40 @@ paths:
   /currency:
   /transaction:
 components:
+  responses:
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TemplateResponseBody'
+          example:
+            status:
+              code: 400
+              message: Bad request
+            body: { }
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TemplateResponseBody'
+          example:
+            status:
+              code: 403
+              message: Forbidden
+            body: { }
+    500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TemplateResponseBody'
+          example:
+            status:
+              code: 500
+              message: Internal server error
+            body: { }
   schemas:
     # utils
     StatusMessage:
