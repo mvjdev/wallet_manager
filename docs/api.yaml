@@ -11,6 +11,20 @@ paths:
   /transaction:
 components:
   responses:
+    ReturnBankAccount:
+      description: return one bank account
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/TemplateResponseBody'
+            properties:
+              status:
+                example:
+                  code: 200
+                  message: OK
+              body:
+                $ref: '#/components/schemas/account'
     400:
       description: Bad request
       content:
