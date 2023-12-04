@@ -1,0 +1,74 @@
+package project.wallet.repository.utils;
+
+import project.wallet.models.*;
+
+import java.sql.*;
+
+public class TransactionCrudUtils {
+  public static String FIND_ALL = """
+    select * from "transaction"
+    full join transaction_tag tt on tt.id = transaction.tag_id
+    full join account a on a.id = transaction.transfer_to
+    full join account a2 on a2.id = transaction.account_id
+    full join currency c on c.id = a.currency_id
+    full join currency c2 on c2.id = a2.currency_id""";
+  public static String DELETE = "delete from \"transaction\" where id = ?;";
+  public static Transaction parseFinding(ResultSet result) throws SQLException {
+    Transaction transaction = new Transaction();
+    TransactionTag tag = new TransactionTag()
+      .setId(result.getLong("tt.id"))
+      .setName(result.getString("tt.name"));
+
+    Currency currency1 = new Currency()
+      .setId(result.getLong("c.id"))
+      .setName(result.getString("c.name"))
+      .setCountry(result.getString("c.country"));
+    Account transferTo = new Account()
+      .setId(result.getLong("a.id"))
+      .setName(result.getString("a.name"))
+      .setCurrentAmount(result.getDouble("a.current_amount"))
+      .setType(result.getString("a.type"))
+      .setAccountNumber(result.getString("a.account_number"))
+      .setCurrencyId(currency1)
+      .setCreationTimestamp(
+        result
+          .getTimestamp("a.creation_timestamp")
+          .toInstant()
+      );
+
+    Currency currency2 = new Currency()
+      .setId(result.getLong("c2.id"))
+      .setName(result.getString("c2.name"))
+      .setCountry(result.getString("c2.country"));
+    Account accountId = new Account()
+      .setId(result.getLong("a2.id"))
+      .setName(result.getString("a2.name"))
+      .setCurrentAmount(result.getDouble("a2.current_amount"))
+      .setType(result.getString("a2.type"))
+      .setAccountNumber(result.getString("a2.account_number"))
+      .setCurrencyId(currency2)
+      .setCreationTimestamp(
+        result
+          .getTimestamp("a2.creation_timestamp")
+          .toInstant()
+      );
+
+    return transaction
+      .setId(result.getLong("transaction.id"))
+      .setTagId(tag)
+      .setAmount(result.getDouble("amount"))
+      .setType(
+        TransactionType.valueOf(
+          result.getString("transaction.type")
+        )
+      )
+      .setTransferTo(transferTo)
+      .setAccountId(accountId)
+      .setCreationTimestamp(
+        result
+          .getTimestamp("transaction.creation_timestamp")
+          .toInstant()
+      )
+    ;
+  }
+}
