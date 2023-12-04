@@ -1,6 +1,6 @@
 create table if not exists "transaction_tag" (
     id serial primary key,
-    name text -- name like: foods, electronics, salaries
+    name text unique -- name like: foods, electronics, salaries
 );
 
 insert into "transaction_tag" (id, name) values (1, 'food') on conflict (id) do update set name = 'food';
