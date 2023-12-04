@@ -11,6 +11,20 @@ paths:
   /transaction:
 components:
   schemas:
+    # utils
+    StatusMessage:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    TemplateResponseBody:
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMessage'
+        body:
+          type: object
     # currency components
     currency_setter:
       type: object
