@@ -15,4 +15,15 @@ public class TransactionTagCrudUtils {
       .setId(resultSet.getLong("id"))
       .setName(resultSet.getString("name"));
   }
+
+  public static TransactionTag findOne(Long id, Connection connection) throws SQLException {
+    String sql = "delete from \"transaction_tag\" where id = ?;";
+    PreparedStatement statement = connection.prepareStatement(sql);
+    statement.setLong(1, id);
+
+    ResultSet result = statement.executeQuery();
+    if(result.next())
+      return parseFindingTag(result);
+    return null;
+  }
 }
