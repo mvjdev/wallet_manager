@@ -3,6 +3,7 @@ package project.wallet.repository.utils;
 import project.wallet.models.*;
 
 import java.sql.*;
+import java.util.Objects;
 
 public class TransactionCrudUtils {
   public static String FIND_ALL = """
@@ -13,6 +14,36 @@ public class TransactionCrudUtils {
     full join currency c on c.id = a.currency_id
     full join currency c2 on c2.id = a2.currency_id""";
   public static String DELETE = "delete from \"transaction\" where id = ?;";
+
+  public static void doTransferToAccount(Transaction transaction, Connection connection) throws SQLException {
+    Account from = transaction.getAccountId();
+    Account target = transaction.getTransferTo();
+    Double moneyToTransfer = transaction.getAmount();
+    Objects.requireNonNull(moneyToTransfer);
+    Objects.requireNonNull(target);
+    Objects.requireNonNull(from);
+
+    String sql = """
+      begin transaction;
+      update "account"
+      set current_amount = current_amount - @amount
+      where id = @fromId;
+            
+      update "account"
+      set current_amount = current_amount + @amount
+      where id = @targetId;
+      commit;
+      """;
+    double amount = Math.abs(transaction.getAmount());
+
+    PreparedStatement statement = connection.prepareStatement(
+      sql.replaceAll("@amount", String.valueOf(amount))
+        .replaceAll("@fromId", String.valueOf(from.getId()))
+        .replaceAll("@targetId", String.valueOf(target.getId()))
+    );
+    int updates = statement.executeUpdate();
+    System.out.printf("transfer transaction done: %d;", updates);
+  }
 
   public static Transaction findOne(Long id, Connection connection) throws SQLException {
     String sql = FIND_ALL + " where transaction.id = ?;";
