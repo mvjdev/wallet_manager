@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d07d3c12-4300-4b56-93fb-f61299bea463" name="Changes" comment="" />
+    <list default="true" id="d07d3c12-4300-4b56-93fb-f61299bea463" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/configs/DbConnect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/configs/DbConnect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/models/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/models/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/models/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/models/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/models/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/models/TransactionTag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/models/TransactionTag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/wallet/repository/CrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/wallet/repository/CrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data/init/create_table_2_account.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data/init/create_table_2_account.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data/init/create_table_3_transaction_tag.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data/init/create_table_3_transaction_tag.sql" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +26,7 @@
       <list>
         <option value="OpenAPI" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -66,13 +78,16 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;19.8.1&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Asus/3D Objects/projects/music_player/mobile/sologram&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Java_deps/postgresql-42.6.0.jar&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Asus/3D Objects/wallet_manager/src/main/java/project/wallet/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Java&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -138,7 +153,8 @@
       <workItem from="1701535913793" duration="102000" />
       <workItem from="1701580060306" duration="11380000" />
       <workItem from="1701592871334" duration="52000" />
-      <workItem from="1701602154964" duration="6008000" />
+      <workItem from="1701602154964" duration="25138000" />
+      <workItem from="1701683500264" duration="14018000" />
     </task>
     <servers />
   </component>
@@ -156,7 +172,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="origin/main" />
                       </list>
                     </value>
                   </entry>
@@ -167,5 +183,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: add currency reference" />
   </component>
 </project>
