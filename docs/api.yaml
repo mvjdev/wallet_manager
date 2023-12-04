@@ -7,6 +7,25 @@ servers:
   - url: 'https://www.wallet_manager.com'
 paths:
   /bank_account:
+    put:
+      tags:
+        - Bank account
+      summary: create or update a bank account
+      operationId: CreateUpdateAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account_setter'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnBankAccount'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
   /currency:
   /transaction:
 components:
