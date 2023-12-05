@@ -18,7 +18,7 @@ on conflict (id)
     do update
     set name = 'BMF',
         currency_id = 1,
-        current_amount = current_amount + 100;
+        current_amount = "account".current_amount + 100;
 
 insert into "account"
 (id, name, current_amount, currency_id)
@@ -27,7 +27,7 @@ on conflict (id)
     do update
     set name = 'BMOI',
         currency_id = 2,
-        current_amount = current_amount + 20000000;
+        current_amount = "account".current_amount + 20000000;
 
 insert into "account"
 (id, name, current_amount, currency_id)
@@ -36,4 +36,4 @@ on conflict (id)
     do update
     set name = 'US. Bank',
         currency_id = 3,
-        current_amount = current_amount + 1000;
+        current_amount = "account".current_amount + 1000;
