@@ -7,10 +7,43 @@ servers:
   - url: 'https://www.wallet_manager.com'
 paths:
   /bank_account:
+    get:
+      tags:
+        - Bank account
+      summary: Retrieve all bank accounts
+      operationId: GetAllAccounts
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnBankAccount'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - Bank account
+      summary: Create a new bank account
+      operationId: CreateAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account_setter'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnBankAccount'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
     put:
       tags:
         - Bank account
-      summary: create or update a bank account
+      summary: Create or Update an existing bank account
       operationId: CreateUpdateAccount
       requestBody:
         content:
@@ -26,8 +59,166 @@ paths:
           $ref: '#/components/responses/403'
         500:
           $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Bank account
+      summary: Delete a bank account
+      operationId: DeleteAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnBankAccount'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
   /currency:
+    get:
+      tags:
+        - Currency
+      summary: Retrieve all currencies
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnCurrency'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - Currency
+      summary: Create a new currency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/responses/ReturnCurrency'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnCurrency'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - Currency
+      summary: Update an existing currency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/currency_setter'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnCurrency'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Currency
+      summary: Delete a currency
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnCurrency'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+
   /transaction:
+    get:
+      tags:
+        - Transaction
+      summary: Retrieve all transactions
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnTransaction'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - Transaction
+      summary: Create a new transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction_setter'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnTransaction'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - Transaction
+      summary: Update an existing transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction_setter'
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnTransaction'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Transaction
+      summary: Delete a transaction
+      operationId: DeleteTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/ReturnTransaction'
+        400:
+          $ref: '#/components/responses/400'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
 components:
   responses:
     ReturnBankAccount:
@@ -44,6 +235,34 @@ components:
                   message: OK
               body:
                 $ref: '#/components/schemas/account'
+    ReturnCurrency:
+      description: Return one currency
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/TemplateResponseBody'
+            properties:
+              status:
+                example:
+                  code: 200
+                  message: OK
+              body:
+                $ref: '#/components/schemas/currency'
+    ReturnTransaction:
+      description: Return one transaction
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/TemplateResponseBody'
+            properties:
+              status:
+                example:
+                  code: 200
+                  message: OK
+              body:
+                $ref: '#/components/schemas/transaction_getter'
     400:
       description: Bad request
       content:
