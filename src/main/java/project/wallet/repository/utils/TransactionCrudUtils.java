@@ -1,5 +1,6 @@
 package project.wallet.repository.utils;
 
+import org.postgresql.util.PSQLException;
 import project.wallet.models.*;
 
 import java.sql.*;
@@ -7,7 +8,37 @@ import java.util.Objects;
 
 public class TransactionCrudUtils {
   public static String FIND_ALL = """
-    select * from "transaction"
+    select
+      "transaction".id as transaction_id,
+      "transaction".amount as transaction_amount,
+      "transaction".type as transaction_type,
+      "transaction".creation_timestamp as transaction_timestamp,
+      
+      tt.id as tag_id,
+      tt.name as tag_name,
+      
+      a.id as transfer_id,
+      a.name as transfer_name,
+      a.current_amount as transfer_amount,
+      a.type as transfer_type,
+      a.account_number as transfer_account_number,
+      a.creation_timestamp as transfer_timestamp,
+      
+      a2.id as account_id,
+      a2.name as account_name,
+      a2.current_amount as account_current_amount,
+      a2.type as account_type,
+      a2.account_number as account_number,
+      a2.creation_timestamp as account_timestamp,
+      
+      c.id as transfer_currency_id,
+      c.name as transfer_currency_name,
+      c.country as transfer_currency_country,
+      
+      c2.id as account_currency_id,
+      c2.name as account_currency_name,
+      c2.country as account_currency_country
+    from "transaction"
     full join transaction_tag tt on tt.id = transaction.tag_id
     full join account a on a.id = transaction.transfer_to
     full join account a2 on a2.id = transaction.account_id
@@ -46,13 +77,13 @@ public class TransactionCrudUtils {
   }
 
   public static Transaction complicatedSaving(Transaction input, Connection connection){
-    Objects.requireNonNull(input);
+    Objects.requireNonNull(input, "input is null");
 
     try {
       Account account = input.getAccountId(); // account for a transaction is required
-      Objects.requireNonNull(account);
+      Objects.requireNonNull(account, "account is null");
       Long accountId = account.getId();
-      Objects.requireNonNull(accountId); // the id of the account is the required key
+      Objects.requireNonNull(accountId, "account id is null"); // the id of the account is the required key
 
       String sql;
       boolean simpleSave = true;
@@ -114,8 +145,11 @@ public class TransactionCrudUtils {
         if(tag != null)
           statement.setLong(1, tag);
 
-        if(transferTo != null)
+        if(transferTo != null){
           statement.setLong(4, transferTo);
+        }else {
+          statement.setNull(4, Types.BIGINT);
+        }
 
         statement.setDouble(2, amount);
         statement.setString(3, type);
@@ -150,7 +184,8 @@ public class TransactionCrudUtils {
         return findOne(returnedId, connection);
       }
     }catch (Exception e){
-      throw new RuntimeException(e);
+      if(!(e instanceof PSQLException))
+        throw new RuntimeException(e);
     }
     return null;
   }
@@ -169,59 +204,52 @@ public class TransactionCrudUtils {
   public static Transaction parseFinding(ResultSet result) throws SQLException {
     Transaction transaction = new Transaction();
     TransactionTag tag = new TransactionTag()
-      .setId(result.getLong("tt.id"))
-      .setName(result.getString("tt.name"));
+      .setId(result.getLong("tag_id"))
+      .setName(result.getString("tag_name"));
 
     Currency currency1 = new Currency()
-      .setId(result.getLong("c.id"))
-      .setName(result.getString("c.name"))
-      .setCountry(result.getString("c.country"));
+      .setId(result.getLong("transfer_currency_id"))
+      .setName(result.getString("transfer_currency_name"))
+      .setCountry(result.getString("transfer_currency_country"));
     Account transferTo = new Account()
-      .setId(result.getLong("a.id"))
-      .setName(result.getString("a.name"))
-      .setCurrentAmount(result.getDouble("a.current_amount"))
-      .setType(result.getString("a.type"))
-      .setAccountNumber(result.getString("a.account_number"))
-      .setCurrencyId(currency1)
-      .setCreationTimestamp(
-        result
-          .getTimestamp("a.creation_timestamp")
-          .toInstant()
-      );
+      .setId(result.getLong("transfer_id"))
+      .setName(result.getString("transfer_name"))
+      .setCurrentAmount(result.getDouble("transfer_amount"))
+      .setType(result.getString("transfer_type"))
+      .setAccountNumber(result.getString("transfer_account_number"))
+      .setCurrencyId(currency1);
+    Timestamp transferTime = result.getTimestamp("transfer_timestamp");
+    if(transferTime != null) transferTo.setCreationTimestamp(transferTime.toInstant());
 
     Currency currency2 = new Currency()
-      .setId(result.getLong("c2.id"))
-      .setName(result.getString("c2.name"))
-      .setCountry(result.getString("c2.country"));
+      .setId(result.getLong("account_currency_id"))
+      .setName(result.getString("account_currency_name"))
+      .setCountry(result.getString("account_currency_country"));
     Account accountId = new Account()
-      .setId(result.getLong("a2.id"))
-      .setName(result.getString("a2.name"))
-      .setCurrentAmount(result.getDouble("a2.current_amount"))
-      .setType(result.getString("a2.type"))
-      .setAccountNumber(result.getString("a2.account_number"))
-      .setCurrencyId(currency2)
-      .setCreationTimestamp(
-        result
-          .getTimestamp("a2.creation_timestamp")
-          .toInstant()
-      );
+      .setId(result.getLong("account_id"))
+      .setName(result.getString("account_name"))
+      .setCurrentAmount(result.getDouble("account_current_amount"))
+      .setType(result.getString("account_type"))
+      .setAccountNumber(result.getString("account_number"))
+      .setCurrencyId(currency2);
+
+    Timestamp accountTime = result.getTimestamp("account_timestamp");
+    if(accountTime != null) accountId.setCreationTimestamp(accountTime.toInstant());
+
+    Timestamp transactionTime = result.getTimestamp("transaction_timestamp");
+    if(transactionTime != null) transaction.setCreationTimestamp(transactionTime.toInstant());
+
+    String transferType = result.getString("transaction_type");
+    if(transferType != null) transaction.setType(
+      TransactionType.valueOf(transferType.toUpperCase())
+    );
 
     return transaction
-      .setId(result.getLong("transaction.id"))
+      .setId(result.getLong("transaction_id"))
       .setTagId(tag)
-      .setAmount(result.getDouble("amount"))
-      .setType(
-        TransactionType.valueOf(
-          result.getString("transaction.type")
-        )
-      )
+      .setAmount(result.getDouble("transaction_amount"))
       .setTransferTo(transferTo)
       .setAccountId(accountId)
-      .setCreationTimestamp(
-        result
-          .getTimestamp("transaction.creation_timestamp")
-          .toInstant()
-      )
     ;
   }
 }
