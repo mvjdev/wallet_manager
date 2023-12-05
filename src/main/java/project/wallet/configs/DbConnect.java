@@ -5,9 +5,17 @@ import java.sql.*;
 public class DbConnect {
   protected static final Connection CONNECTION;
 
-  private static String URL = "jdbc:postgresql://localhost:5432/wallet";
-  private static String USER = "prog_admin";
-  private static String PASSWORD = "123456";
+  public static boolean isConnected() {
+    try {
+      return !CONNECTION.isClosed();
+    }catch (SQLException ignored){
+    }
+    return false;
+  }
+
+  private static String URL = "jdbc:postgresql://localhost:5432/wallet"; // default value
+  private static String USER = "prog_admin"; // default value
+  private static String PASSWORD = "123456"; // default value
 
 
   static {

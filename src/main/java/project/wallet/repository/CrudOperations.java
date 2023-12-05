@@ -1,10 +1,27 @@
 package project.wallet.repository;
 
-import java.util.List;
+import java.util.*;
 
 public interface CrudOperations<T> {
     public T save(T value);
-    public List<T> saveAll(List<T> values);
+
+    public default List<T> saveAll(List<T> values) {
+        List<T> list = new ArrayList<>();
+        if(values.size() == 0) return list;
+        if(values.size() == 1){
+            T one = values.get(0);
+            T saved = save(one);
+            if (saved != null) list.add(saved);
+            return list;
+        }
+
+        for (T value : values) {
+            T saved = save(value);
+            if(saved != null) list.add(saved);
+        }
+        return list;
+    }
+
     public List<T> findAll();
     public T delete(T value);
 }
