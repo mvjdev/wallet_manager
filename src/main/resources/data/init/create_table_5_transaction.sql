@@ -4,7 +4,7 @@ create table if not exists "transaction" (
 
     tag_id int references "transaction_tag"(id) not null,
     amount double precision default 0, -- the amount price
-    type transaction_type not null, -- like transfer, spending, claims
+    type transaction_type not null, -- like, spending, claims
 
     -- transfer to another bank account
     -- will create a transaction to the sibling account on success
@@ -42,7 +42,7 @@ on conflict (id)
 ;
 
 insert into "transaction" (id, tag_id, amount, type, transfer_to, account_id)
-values (3, 2, 400, 'spend'::transaction_type, 1, 3) -- type spend but do a trasnfer
+values (3, 2, 400, 'spend'::transaction_type, 1, 3) -- type spend but do a transfer
 on conflict (id)
     do update
     set id = 3,
