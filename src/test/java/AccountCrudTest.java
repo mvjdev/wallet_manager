@@ -24,7 +24,6 @@ public class AccountCrudTest {
     Account account = new Account()
       .setName("jupiter")
       .setType("bank")
-      .setCurrentAmount(400.0)
       .setCurrencyId(currency)
       .setAccountNumber("2022 0000 1111 0000")
     ;
