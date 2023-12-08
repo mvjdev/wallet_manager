@@ -1,70 +1,78 @@
 package project.wallet.repository;
 
-import project.wallet.configs.DbConnect;
-import project.wallet.models.Account;
-import project.wallet.models.Currency;
-import project.wallet.repository.utils.AccountCrudUtils;
+import project.wallet.models.*;
 
 import java.sql.*;
-import java.util.*;
+import java.util.List;
 
-public class AccountCrudOperations extends DbConnect implements CrudOperations<Account> {
-  @Override
-  public Account save(Account value) {
+public class AccountCrudOperations implements CrudOperations<Account> {
+  private final MakerCrudOperations<Account> operations;
+
+  public AccountCrudOperations(){
+    this.operations = new MakerCrudOperations<>("account", "id");
+
+    final String[] insertColumns = { "name", "type", "account_number", "currency_id" };
+    final String[] onSelectColumns = new String[]{
+      "account.id as account_id",
+      "account.name as account_name",
+      "type",
+      "account_number",
+      "creation_timestamp",
+      "c.id as currency_id",
+      "c.name as currency_name",
+      "country as currency_country"
+    };
+
+    operations
+      .setInsertColumns(insertColumns)
+      .setFindingJoining("full outer join currency c on c.id = account.currency_id")
+      .setFindParser(onSelectColumns, this::parseFound)
+    ;
+  }
+
+  private Account parseFound(ResultSet resultSet){
     try {
-      PreparedStatement statement = CONNECTION.prepareStatement(AccountCrudUtils.SAVE);
-      statement.setString(1, value.getName());
-      statement.setString(2, value.getType());
-      statement.setDouble(3, value.getCurrentAmount());
-      statement.setString(4, value.getAccountNumber());
+      Account account = new Account()
+        .setId(resultSet.getLong("account_id"))
+        .setName(resultSet.getString("account_name"))
+        .setType(resultSet.getString("type"))
+        .setAccountNumber(resultSet.getString("account_number"))
+        ;
+      Timestamp timestamp = resultSet.getTimestamp("creation_timestamp");
+      if(timestamp != null) account.setCreationTimestamp(timestamp.toInstant());
 
-      Currency currency = value.getCurrencyId();
-      if(currency != null) statement.setLong(5, currency.getId());
+      Currency currency = new Currency()
+        .setId(resultSet.getLong("currency_id"))
+        .setName(resultSet.getString("currency_name"))
+        .setCountry(resultSet.getString("currency_country"))
+        ;
 
-      ResultSet result = statement.executeQuery();
-      if(result.next()) return AccountCrudUtils.findOne(
-        result.getLong("id"), CONNECTION
-      );
+      account.setCurrencyId(currency);
+      return account;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+  }
 
-    return null;
+  @Override
+  public Account save(Account value) {
+    String insert = (
+      "'" +
+      value.getName() + "', '" +
+      value.getType() + "', " +
+      value.getAccountNumber() + "', " +
+      (value.getCurrencyId() != null ? value.getCurrencyId().getId() : "null")
+    );
+    return operations.insertValue(insert);
   }
 
   @Override
   public List<Account> findAll() {
-    List<Account> accounts = new ArrayList<>();
-    try {
-      ResultSet results = CONNECTION
-        .prepareStatement(AccountCrudUtils.FIND_ALL)
-        .executeQuery();
-
-      while ( results.next() ) accounts.add( AccountCrudUtils.parseFindingAccount(results) );
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
-
-    return accounts;
+    return operations.findAll();
   }
 
   @Override
-  public Account delete(Account value) {
-    try {
-      Long id = value.getId();
-      Objects.requireNonNull(id);
-      Account found = AccountCrudUtils.findOne(id, CONNECTION);
-
-      PreparedStatement statement = CONNECTION.prepareStatement(AccountCrudUtils.DELETE);
-      statement.setLong(1, id);
-      int deleted = statement.executeUpdate();
-
-      if(deleted > 0 && found != null)
-        return found;
-    }catch (SQLException e){
-      throw new RuntimeException(e);
-    }
-
-    return null;
+  public Account deleteById(Long id) {
+    return operations.deleteById(id);
   }
 }
