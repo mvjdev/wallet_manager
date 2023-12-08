@@ -8,7 +8,6 @@ import java.time.Instant;
 public class Account {
   private Long id;
   private String name;
-  private Double currentAmount;
   private String type;
   private String accountNumber;
   private Currency currencyId;
@@ -21,11 +20,6 @@ public class Account {
 
   public Account setName(String name) {
     this.name = name;
-    return this;
-  }
-
-  public Account setCurrentAmount(Double currentAmount) {
-    this.currentAmount = currentAmount;
     return this;
   }
 
