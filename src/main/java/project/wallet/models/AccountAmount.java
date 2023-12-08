@@ -2,6 +2,7 @@ package project.wallet.models;
 
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Getter
@@ -11,7 +12,10 @@ public class AccountAmount {
   private Account account;
   private Instant transactionTime;
 
-  public AccountAmount setAccount(Account account) {
+    public AccountAmount(Long accountId, Double amount, Timestamp transactionTime) {
+    }
+
+    public AccountAmount setAccount(Account account) {
     this.account = account;
     return this;
   }

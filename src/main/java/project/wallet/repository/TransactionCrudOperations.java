@@ -100,3 +100,4 @@ public class TransactionCrudOperations implements CrudOperations<Transaction> {
     return operations.deleteById(id);
   }
 }
+
