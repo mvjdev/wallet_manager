@@ -48,48 +48,68 @@ public class TransactionOperations extends TransactionCrudOperations {
     this.logger = Logger.getLogger("transaction.operations.logger");
   }
 
+  public AccountTransaction doTransaction(Long accountId, Double amount) {
+    TransactionType transactionType = amount >= 0 ? TransactionType.CLAIM : TransactionType.SPEND;
 
-  public AccountTransaction doTransaction(Long accountId, Double amount){
-    TransactionType transactionType = TransactionType.SPEND;
-    if(isPositiveValue(amount)) transactionType = TransactionType.CLAIM;
+    try (Statement statement = CONNECTION.createStatement()) {
+      CONNECTION.setAutoCommit(false);
 
-    return new AccountTransaction()
-      .setId(null)
-      .setName(null)
-      .setAmount(null)
-      .setCurrency(null)
-      .setTransactions(null)
-    ;
-  }
+      String insertTransactionSQL = "INSERT INTO \"transaction\" (account_id, amount, type, creation_timestamp) VALUES ("
+              + accountId + ", " + Math.abs(amount) + ", '" + transactionType + "', '" + Timestamp.from(Instant.now()) + "')";
+      statement.executeUpdate(insertTransactionSQL, Statement.RETURN_GENERATED_KEYS);
 
-  public AccountAmount getCurrentBalance(Long accountId){
-    Account account = new Account()
-      .setId(null)
-      .setType(null)
-      .setName(null)
-      .setAccountNumber(null)
-      .setCurrencyId(null)
-      .setCreationTimestamp(null)
-      ;
-    return new AccountAmount()
-      .setId(null)
-      .setAmount(null)
-      .setAccount(account)
-      .setTransactionTime(null)
-      ;
-  }
+      String updateAccountSQL = "UPDATE \"account\" SET current_amount = current_amount + " + amount + " WHERE id = " + accountId;
+      statement.executeUpdate(updateAccountSQL);
 
-  public List<AccountAmount> getAmountHistory(Long accountId, Instant intervalStart, Instant intervalEnd){
-    List<AccountAmount> amounts = new ArrayList<>();
-    try {
-      String sql = "select * from \"account_amount\" " +
-        "full join account a on a.id = account_amount.account_id " +
-        "where creation_timestamp between ? and ?;";
-      Statement statement = CONNECTION.createStatement();
-      ResultSet resultSet = statement.executeQuery(sql);
-    }catch (SQLException e){
+      CONNECTION.commit();
+    } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+    return doTransaction(accountId,amount);
+  }
+
+
+
+
+  public AccountAmount getCurrentBalance(Long accountId) {
+    double currentBalance = 0.0;
+
+    try (Statement statement = CONNECTION.createStatement()) {
+      String sql = "SELECT SUM(amount) AS total_amount FROM account_amount WHERE account_id = " + accountId;
+      ResultSet resultSet = statement.executeQuery(sql);
+
+      if (resultSet.next()) {
+        currentBalance = resultSet.getDouble("total_amount");
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return new AccountAmount(accountId, currentBalance, null);
+  }
+
+
+  public List<AccountAmount> getAmountHistory(Long accountId, Instant intervalStart, Instant intervalEnd) {
+    List<AccountAmount> amounts = new ArrayList<>();
+
+    try (Statement statement = CONNECTION.createStatement()) {
+      String account_amount = "SELECT * FROM account_amount WHERE transaction_time BETWEEN '"
+              + Timestamp.from(intervalStart) + "' AND '" + Timestamp.from(intervalEnd) + "'";
+      ResultSet resultSet = statement.executeQuery(account_amount);
+
+      while (resultSet.next()) {
+        accountId = resultSet.getLong("account_id");
+        Double amount = resultSet.getDouble("amount");
+        Timestamp transactionTime = resultSet.getTimestamp("transaction_time");
+
+        AccountAmount accountAmount = new AccountAmount(accountId, amount, transactionTime);
+        amounts.add(accountAmount);
+      }
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
     return amounts;
   }
 
