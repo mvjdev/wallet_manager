@@ -52,44 +52,33 @@ public class TransactionOperations extends TransactionCrudOperations {
   public AccountTransaction doTransaction(Long accountId, Double amount){
     TransactionType transactionType = TransactionType.SPEND;
     if(isPositiveValue(amount)) transactionType = TransactionType.CLAIM;
-
-    return new AccountTransaction()
-      .setId(null)
-      .setName(null)
-      .setAmount(null)
-      .setCurrency(null)
-      .setTransactions(null)
-    ;
   }
 
-  public AccountAmount getCurrentBalance(Long accountId){
-    Account account = new Account()
-      .setId(null)
-      .setType(null)
-      .setName(null)
-      .setAccountNumber(null)
-      .setCurrencyId(null)
-      .setCreationTimestamp(null)
-      ;
-    return new AccountAmount()
-      .setId(null)
-      .setAmount(null)
-      .setAccount(account)
-      .setTransactionTime(null)
-      ;
-  }
-
-  public List<AccountAmount> getAmountHistory(Long accountId, Instant intervalStart, Instant intervalEnd){
+  /*public AccountAmount getCurrentBalance(Long accountId){
     List<AccountAmount> amounts = new ArrayList<>();
-    try {
-      String sql = "select * from \"account_amount\" " +
-        "full join account a on a.id = account_amount.account_id " +
-        "where creation_timestamp between ? and ?;";
-      Statement statement = CONNECTION.createStatement();
-      ResultSet resultSet = statement.executeQuery(sql);
-    }catch (SQLException e){
+  }*/
+
+  public List<AccountAmount> getAmountHistory(Long accountId, Instant intervalStart, Instant intervalEnd) {
+    List<AccountAmount> amounts = new ArrayList<>();
+
+    try (Statement statement = CONNECTION.createStatement()) {
+      String account_amount = "SELECT * FROM account_amount WHERE transaction_time BETWEEN '"
+              + Timestamp.from(intervalStart) + "' AND '" + Timestamp.from(intervalEnd) + "'";
+      ResultSet resultSet = statement.executeQuery(account_amount);
+
+      while (resultSet.next()) {
+        accountId = resultSet.getLong("account_id");
+        Double amount = resultSet.getDouble("amount");
+        Timestamp transactionTime = resultSet.getTimestamp("transaction_time");
+
+        AccountAmount accountAmount = new AccountAmount(accountId, amount, transactionTime);
+        amounts.add(accountAmount);
+      }
+
+    } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+
     return amounts;
   }
 
