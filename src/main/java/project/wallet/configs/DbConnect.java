@@ -3,7 +3,7 @@ package project.wallet.configs;
 import java.sql.*;
 
 public class DbConnect {
-  protected static final Connection CONNECTION;
+  public static final Connection CONNECTION;
 
   public static boolean isConnected() {
     try {
