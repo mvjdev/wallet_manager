@@ -48,15 +48,46 @@ public class TransactionOperations extends TransactionCrudOperations {
     this.logger = Logger.getLogger("transaction.operations.logger");
   }
 
+  public AccountTransaction doTransaction(Long accountId, Double amount) {
+    TransactionType transactionType = amount >= 0 ? TransactionType.CLAIM : TransactionType.SPEND;
 
-  public AccountTransaction doTransaction(Long accountId, Double amount){
-    TransactionType transactionType = TransactionType.SPEND;
-    if(isPositiveValue(amount)) transactionType = TransactionType.CLAIM;
+    try (Statement statement = CONNECTION.createStatement()) {
+      CONNECTION.setAutoCommit(false);
+
+      String insertTransactionSQL = "INSERT INTO \"transaction\" (account_id, amount, type, creation_timestamp) VALUES ("
+              + accountId + ", " + Math.abs(amount) + ", '" + transactionType + "', '" + Timestamp.from(Instant.now()) + "')";
+      statement.executeUpdate(insertTransactionSQL, Statement.RETURN_GENERATED_KEYS);
+
+      String updateAccountSQL = "UPDATE \"account\" SET current_amount = current_amount + " + amount + " WHERE id = " + accountId;
+      statement.executeUpdate(updateAccountSQL);
+
+      CONNECTION.commit();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return doTransaction(accountId,amount);
   }
 
-  /*public AccountAmount getCurrentBalance(Long accountId){
-    List<AccountAmount> amounts = new ArrayList<>();
-  }*/
+
+
+
+  public AccountAmount getCurrentBalance(Long accountId) {
+    double currentBalance = 0.0;
+
+    try (Statement statement = CONNECTION.createStatement()) {
+      String sql = "SELECT SUM(amount) AS total_amount FROM account_amount WHERE account_id = " + accountId;
+      ResultSet resultSet = statement.executeQuery(sql);
+
+      if (resultSet.next()) {
+        currentBalance = resultSet.getDouble("total_amount");
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return new AccountAmount(accountId, currentBalance, null);
+  }
+
 
   public List<AccountAmount> getAmountHistory(Long accountId, Instant intervalStart, Instant intervalEnd) {
     List<AccountAmount> amounts = new ArrayList<>();
