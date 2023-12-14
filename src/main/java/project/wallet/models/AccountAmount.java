@@ -12,10 +12,10 @@ public class AccountAmount {
   private Account account;
   private Instant transactionTime;
 
-    public AccountAmount(Long accountId, Double amount, Timestamp transactionTime) {
-    }
+  public AccountAmount(Long accountId, Double amount, Timestamp transactionTime) {
+  }
 
-    public AccountAmount setAccount(Account account) {
+  public AccountAmount setAccount(Account account) {
     this.account = account;
     return this;
   }
