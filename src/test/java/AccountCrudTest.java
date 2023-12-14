@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Test;
 import project.wallet.models.*;
 import project.wallet.repository.AccountCrudOperations;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +13,7 @@ public class AccountCrudTest {
     List<Account> accounts = operations.findAll();
 
     assertNotNull(accounts);
-    assertTrue(accounts.size() > 0);
+    assertFalse(accounts.isEmpty());
     assertNotNull(accounts.get(0).getId());
   }
 
