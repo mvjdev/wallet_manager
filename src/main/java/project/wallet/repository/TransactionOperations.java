@@ -114,6 +114,8 @@ public class TransactionOperations extends TransactionCrudOperations {
   }
 
   public boolean doTransfer(Long from, Long to, Double amount){
+    if(from.equals(to)) return false; // don't do transaction if equals
+
     try {
       String sql = """
         begin transaction;
