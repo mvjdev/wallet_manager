@@ -11,8 +11,6 @@ import static project.wallet.configs.DbConnect.CONNECTION;
 
 public class TransactionOperations extends TransactionCrudOperations {
   private final Logger logger;
-
-
   private static boolean isPositiveValue(Double value){
     return Math.abs(value) == value;
   }
@@ -67,9 +65,6 @@ public class TransactionOperations extends TransactionCrudOperations {
     }
     return doTransaction(accountId,amount);
   }
-
-
-
 
   public AccountAmount getCurrentBalance(Long accountId) {
     double currentBalance = 0.0;
