@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d07d3c12-4300-4b56-93fb-f61299bea463" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/896f6042-be0a-4314-8352-a9e5a4e7fef2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/896f6042-be0a-4314-8352-a9e5a4e7fef2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/896f6042-be0a-4314-8352-a9e5a4e7fef2/storage_v2/_src_/database/wallet.-VOa0A/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/896f6042-be0a-4314-8352-a9e5a4e7fef2/storage_v2/_src_/database/wallet.-VOa0A/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-    </list>
+    <list default="true" id="d07d3c12-4300-4b56-93fb-f61299bea463" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -154,7 +149,7 @@
       <workItem from="1701602154964" duration="25138000" />
       <workItem from="1701683500264" duration="14018000" />
       <workItem from="1701751906972" duration="315000" />
-      <workItem from="1702543877049" duration="399000" />
+      <workItem from="1702543877049" duration="777000" />
     </task>
     <servers />
   </component>
