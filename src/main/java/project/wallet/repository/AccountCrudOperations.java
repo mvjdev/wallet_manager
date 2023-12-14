@@ -63,7 +63,6 @@ public class AccountCrudOperations implements CrudOperations<Account> {
       value.getAccountNumber() + "', " +
       (value.getCurrencyId() != null ? value.getCurrencyId().getId() : "null")
     );
-    System.out.println(insert);
     return operations.insertValue(insert);
   }
 
