@@ -7,7 +7,7 @@ create table if not exists "account" (
     type varchar(255),
     account_number varchar, -- the bank account number series; example: 0212 2134 1231 4588
 
-    currency_id bigint references "currency"(id) not null,
+    currency_id bigint references "currency"(id) on delete cascade not null,
     creation_timestamp timestamp default now()
 );
 
