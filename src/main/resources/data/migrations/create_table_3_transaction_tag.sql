@@ -58,5 +58,13 @@ values
     ('Internet'),
     ('Phone, mobile phone'),
     ('Postal services'),
-    ('Software, apps, games')
+    ('Software, apps, games'),
+    ('Financial expenses'),
+    ('Advisory'),
+    ('Charges, Fees'),
+    ('Child Support'),
+    ('Fines'),
+    ('Insurances'),
+    ('Loan, interests'),
+    ('Taxes')
 ;
