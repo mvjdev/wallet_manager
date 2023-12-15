@@ -27,5 +27,10 @@ values
     ('Mortgage'),
     ('Property insurance'),
     ('Rent'),
-    ('Services')
+    ('Services'),
+    ('Transportation'),
+    ('Business trips'),
+    ('Long distance'),
+    ('Public transport'),
+    ('Taxi')
 ;
