@@ -84,5 +84,9 @@ values
     ('Refunds (tax, purchase)'),
     ('Rental income'),
     ('Sale'),
-    ('Wage, invoices')
+    ('Wage, invoices'),
+    ('Others'),
+    ('Missing'),
+    ('Unknown expense'),
+    ('Unknown income')
 ;
