@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 @Getter
 @Builder
 public class Account {
-  private Long AccountId;
+  private Long accountId;
   private String name;
   private String type;
   private Double currentAmount;
   private String accountNumber;
-  private Currency IdCurrency;
+  private Currency idCurrency;
   private Timestamp creationTimestamp;
 }

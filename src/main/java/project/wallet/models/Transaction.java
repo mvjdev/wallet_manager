@@ -9,11 +9,11 @@ import java.time.Instant;
 @Getter
 @Builder
 public class Transaction {
-  private Long TransactionId;
+  private Long transactionId;
   private TransactionTag tagId;
   private Double amount;
   private TransactionType type;
   private Account transferTo;
-  private Account IdAccount;
+  private Account idAccount;
   private Timestamp creationTimestamp;
 }
