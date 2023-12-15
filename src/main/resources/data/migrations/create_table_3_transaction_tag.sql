@@ -8,5 +8,17 @@ values
     ('Food & Drinks'),
     ('Bar, cafe'),
     ('Groceries'),
-    ('Restaurant, fast-food')
+    ('Restaurant, fast-food'),
+    ('Shopping'),
+    ('Clothes & shoes'),
+    ('Drug-store, chemist'),
+    ('Electronics, accessories'),
+    ('Free time'),
+    ('Gifts, joy'),
+    ('Health and beauty'),
+    ('Home, garden'),
+    ('Jewels, accessories'),
+    ('Kids'),
+    ('Pets, animals'),
+    ('Stationery, tools')
 ;
