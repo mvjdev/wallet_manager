@@ -1,5 +1,5 @@
 create table if not exists "transaction_tag" (
-    id serial primary key,
+    transaction_tag_id serial primary key,
     tag_name text unique -- name like: foods, electronics, salaries
 );
 
@@ -89,4 +89,4 @@ values
     ('Missing'),
     ('Unknown expense'),
     ('Unknown income')
-;
+on conflict (tag_name) do nothing;
