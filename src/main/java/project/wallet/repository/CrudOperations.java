@@ -7,7 +7,7 @@ public interface CrudOperations<T> {
 
     public default List<T> saveAll(List<T> values) {
         List<T> list = new ArrayList<>();
-        if(values.size() == 0) return list;
+        if(values == null || values.isEmpty()) return list;
 
         if(values.size() == 1){
             T one = values.get(0);
