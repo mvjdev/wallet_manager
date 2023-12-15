@@ -53,5 +53,10 @@ values
     ('Life events'),
     ('Lottery, gambling'),
     ('TV, Streaming'),
-    ('Wellness, beauty')
+    ('Wellness, beauty'),
+    ('Communication, PC'),
+    ('Internet'),
+    ('Phone, mobile phone'),
+    ('Postal services'),
+    ('Software, apps, games')
 ;
