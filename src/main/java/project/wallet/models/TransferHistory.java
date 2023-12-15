@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Getter
 @Builder
 public class TransferHistory {
-    private Long TransferHistoryId;
+    private Long transferHistoryId;
     private Transaction transferFrom;
     private Transaction transferTo;
     private Timestamp transferTime;
