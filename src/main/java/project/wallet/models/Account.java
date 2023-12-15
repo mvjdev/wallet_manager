@@ -3,15 +3,15 @@ package project.wallet.models;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Getter
 @Builder
 public class Account {
-  private Long id;
+  private Long AccountId;
   private String name;
   private String type;
   private String accountNumber;
-  private Currency currencyId;
-  private Instant creationTimestamp;
+  private Currency IdCurrency;
+  private Timestamp creationTimestamp;
 }

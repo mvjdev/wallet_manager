@@ -9,8 +9,8 @@ import java.time.Instant;
 @Getter
 @Builder
 public class AccountAmount {
-  private Long id;
+  private Long AccountAmountId;
   private Double amount;
-  private Account account;
-  private Instant transactionTime;
+  private Account IdAccount;
+  private Timestamp transactionTime;
 }

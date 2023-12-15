@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Builder
 public class AccountTransaction {
-  private Long id;
+  private Long AccountTransactionId;
   private String name;
   private String type;
   private Double amount;

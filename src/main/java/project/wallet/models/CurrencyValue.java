@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Getter
 @Builder
 public class CurrencyValue {
-    private Long id;
+    private Long CurrencyValueId;
     private Currency idDeviseSource;
     private Currency idDeviceDest;
     private Double amount;
