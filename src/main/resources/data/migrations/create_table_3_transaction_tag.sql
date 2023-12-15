@@ -32,5 +32,12 @@ values
     ('Business trips'),
     ('Long distance'),
     ('Public transport'),
-    ('Taxi')
+    ('Taxi'),
+    ('Vehicle'),
+    ('Fuel'),
+    ('Leasing'),
+    ('Parking'),
+    ('Rentals'),
+    ('Vehicle insurance'),
+    ('Vehicle maintenance')
 ;
