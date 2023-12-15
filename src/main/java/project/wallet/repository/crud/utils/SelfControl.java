@@ -122,7 +122,7 @@ public class SelfControl<T> {
 
   protected void wrapObjectToStatement(T value, PreparedStatement statement, boolean update) throws Exception {
     List<String> cleanColumnInserts = mapCleanReturnColumn(
-        this.params.getCreateColumnSet(),
+        update ? this.params.getUpdatableColumns() : this.params.getCreateColumnSet(),
         this.definition.mapColumns()
     );
     if(update){
@@ -284,5 +284,19 @@ public class SelfControl<T> {
 
   private void doDeleteAllQuery(){
     this.deleteAllQuery = "delete from " + getSchemaTable() + " returning " + READABLE_COLUMN;
+  }
+
+
+  protected Object guessIdentity(T value){
+    try {
+      String customColumnName = this.params.getUpdateByColumn();
+      if (customColumnName == null) {
+        customColumnName = this.definition.getId().getPostgresColumnName();
+      }
+      String javaField = this.definition.getJavaFieldFromPsqlColumn(customColumnName);
+      return getMethodGetterValue(value, javaField);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
