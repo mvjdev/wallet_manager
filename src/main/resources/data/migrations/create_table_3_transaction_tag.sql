@@ -5,19 +5,8 @@ create table if not exists "transaction_tag" (
 
 insert into transaction_tag (tag_name)
 values
-    ('Alimentation'),
-    ('Achats et boutiques en ligne'),
-    ('Logement'),
-    ('Transports'),
-    ('Véhicule'),
-    ('Loisirs'),
-    ('Multimedia/Informatique'),
-    ('Frais financiers'),
-    ('Investissements'),
-    ('Revenu'),
-    ('Autres'),
-    ('Inconnu')
+    ('Food & Drinks'),
+    ('Bar, cafe'),
+    ('Groceries'),
+    ('Restaurant, fast-food')
 ;
-
-
-
