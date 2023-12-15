@@ -11,6 +11,7 @@ public class TransactionCrudOperations extends CrudMaker<Transaction> {
             .builder()
             .entityClass(Transaction.class)
             .createColumnSet(new String[]{"id_tag", "amount", "type", "id_account"})
+            .readIdentityColumn("id_account")
             .build()
     );
   }
