@@ -20,5 +20,12 @@ values
     ('Jewels, accessories'),
     ('Kids'),
     ('Pets, animals'),
-    ('Stationery, tools')
+    ('Stationery, tools'),
+    ('Housing'),
+    ('Energy, utilities'),
+    ('Maintenance, repairs'),
+    ('Mortgage'),
+    ('Property insurance'),
+    ('Rent'),
+    ('Services')
 ;
