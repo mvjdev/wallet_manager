@@ -2,6 +2,7 @@ package project.wallet.configs;
 
 import java.sql.*;
 
+@Deprecated
 public class DbConnect {
   public static final Connection CONNECTION;
 
