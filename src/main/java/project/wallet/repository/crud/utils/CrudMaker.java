@@ -36,11 +36,11 @@ public class CrudMaker<T> extends SelfControl<T> implements CrudOperations<T> {
 
   @Override
   public T saveOrUpdate(T value) {
-    T found = this.findByIdentity(value);
+    T found = this.findByIdentity(this.guessIdentity(value));
     if(found != null) {
-      return this.save(value);
+      return this.updateByIdentity(value);
     }
-    return this.updateByIdentity(value);
+    return this.save(value);
   }
 
   @Override
@@ -71,6 +71,25 @@ public class CrudMaker<T> extends SelfControl<T> implements CrudOperations<T> {
   }
 
   @Override
+  public <Id> List<T> findByAllIdentity(Id identity) {
+    List<T> list = new ArrayList<>();
+    try {
+      Connection connection = POOL_CONNECTION.getConnection();
+      PreparedStatement statement = connection.prepareStatement(this.findByIdentityQuery);
+      this.wrapIdentityToStatement(identity, statement);
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next()){
+        list.add(
+            this.mapResultSetToInstance(resultSet)
+        );
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return list;
+  }
+
+  @Override
   public List<T> findAll() {
     List<T> list = new ArrayList<>();
     try {
@@ -93,7 +112,6 @@ public class CrudMaker<T> extends SelfControl<T> implements CrudOperations<T> {
     try {
       Connection connection = POOL_CONNECTION.getConnection();
       PreparedStatement statement = connection.prepareStatement(this.updateByColumnQuery);
-      System.out.println(statement);
       this.wrapObjectToStatement(newValue, statement, true);
       ResultSet resultSet = statement.executeQuery();
       if (resultSet.next()){
