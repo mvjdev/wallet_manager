@@ -9,12 +9,8 @@ import java.time.Instant;
 @Getter
 @Builder
 public class AccountAmount {
-  private Long id;
+  private Long AccountAmountId;
   private Double amount;
-  private Account account;
-  private Instant transactionTime;
-
-  public AccountAmount(Long accountId, Double amount, Timestamp transactionTime) {
-    // FIXME: remove and use builder
-  }
+  private Account IdAccount;
+  private Timestamp transactionTime;
 }

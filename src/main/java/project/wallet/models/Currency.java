@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Currency {
-  private Long id;
+  private Long CurrencyId;
   private String name;
   private String country;
 }

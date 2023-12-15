@@ -1,6 +1,6 @@
 create table if not exists "account_amount" (
-    id bigserial primary key,
+    account_amount_id bigserial primary key,
     amount double precision,
-    account_id bigint references "account"(id) on delete cascade,
+    id_account bigint references "account"(account_id) on delete cascade,
     transaction_time timestamp default now()
 );

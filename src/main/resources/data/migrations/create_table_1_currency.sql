@@ -1,6 +1,6 @@
 -- money devise to set on an account (one per account)
 create table if not exists "currency" (
-  id bigserial primary key,
+  currency_id bigserial primary key,
   name varchar(100) not null,
   country text not null unique
 );
