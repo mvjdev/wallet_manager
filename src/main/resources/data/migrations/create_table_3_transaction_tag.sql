@@ -39,5 +39,19 @@ values
     ('Parking'),
     ('Rentals'),
     ('Vehicle insurance'),
-    ('Vehicle maintenance')
+    ('Vehicle maintenance'),
+    ('Life & Entertainment'),
+    ('Active sport, fitness'),
+    ('Alcohol, tobacco'),
+    ('Books, audio, subscriptions'),
+    ('Charity, gifts'),
+    ('Culture, sport events'),
+    ('Education, development'),
+    ('Health care, doctor'),
+    ('Hobbies'),
+    ('Holiday, trips, hotels'),
+    ('Life events'),
+    ('Lottery, gambling'),
+    ('TV, Streaming'),
+    ('Wellness, beauty')
 ;
