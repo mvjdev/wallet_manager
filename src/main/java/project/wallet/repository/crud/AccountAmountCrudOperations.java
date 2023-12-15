@@ -10,7 +10,7 @@ public class AccountAmountCrudOperations extends CrudMaker<AccountAmount> {
         CrudMakerParams
             .builder()
             .entityClass(AccountAmount.class)
-            .createColumnSet(new String[]{"name", "type", "current_amount", "id_currency"})
+            .createColumnSet(new String[]{"amount", "id_amount"})
             .build()
     );
   }
