@@ -12,6 +12,7 @@ public class TransactionTagCrudOperations extends CrudMaker<TransactionTag> {
             .entityClass(TransactionTag.class)
             .updatableColumns(new String[]{"tag_name"})
             .createColumnSet(new String[]{"tag_name"})
+            .readIdentityColumn("tag_name")
             .build()
     );
   }
