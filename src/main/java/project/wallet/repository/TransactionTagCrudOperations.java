@@ -2,45 +2,88 @@ package project.wallet.repository;
 
 import project.wallet.models.TransactionTag;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class TransactionTagCrudOperations implements CrudOperations<TransactionTag> {
+public class TransactionTagCrudOperations {
 
-  private final MakerCrudOperations<TransactionTag> operations;
+  private Connection connection;
 
-  public TransactionTagCrudOperations(){
-    this.operations = new MakerCrudOperations<>("transaction_tag", "id");
-    operations
-      .setInsertColumns(new String[]{"name"})
-      .setFindParser(new String[]{"id", "name"}, this::parseFound);
-    ;
+  public TransactionTagCrudOperations(Connection connection) {
+    this.connection = connection;
   }
 
-  private TransactionTag parseFound(ResultSet resultSet) {
+  public List<TransactionTag> findAll() {
+    List<TransactionTag> categories = new ArrayList<>();
     try {
-      return new TransactionTag()
-        .setId(resultSet.getLong("id"))
-        .setName(resultSet.getString("name"))
-      ;
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery("SELECT * FROM transaction_tag");
+
+      while (resultSet.next()) {
+        TransactionTag category = new TransactionTag()
+                .setCategoryId(resultSet.getLong("category_id"))
+                .setCategoryName(resultSet.getString("category_name"));
+        categories.add(category);
+      }
+
+      resultSet.close();
+      statement.close();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+    return categories;
   }
 
+  public TransactionTag delete(TransactionTag value) {
+    try {
+      Long id = value.getTagId();
+      Objects.requireNonNull(id);
 
-  @Override
+      Statement statement = connection.createStatement();
+      int deleted = statement.executeUpdate("DELETE FROM transaction_tag WHERE tag_id = " + id);
+
+      if (deleted > 0) {
+        statement.close();
+        return value;
+      }
+      statement.close();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return null;
+  }
+
   public TransactionTag save(TransactionTag value) {
-    return operations.insertValue("'" + value.getName() + "'");
-  }
+    try {
+      String categoryName = value.getTagName();
+      Statement statement = connection.createStatement();
+      String insertQuery = "INSERT INTO transaction_tag (tag_name) VALUES ('" + categoryName + "')";
 
-  @Override
-  public List<TransactionTag> findAll() {
-    return operations.findAll();
-  }
+      int affectedRows = statement.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
 
-  @Override
-  public TransactionTag deleteById(Long id) {
-    return operations.deleteById(id);
+      if (affectedRows == 0) {
+        throw new SQLException("Insertion failed, no rows affected.");
+      }
+
+      ResultSet generatedKeys = statement.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        Long categoryId = generatedKeys.getLong(1);
+        value.getTagId();
+      } else {
+        throw new SQLException("Insertion failed, no ID obtained.");
+      }
+
+      generatedKeys.close();
+      statement.close();
+
+      return value;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
