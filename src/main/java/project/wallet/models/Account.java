@@ -11,6 +11,7 @@ public class Account {
   private Long AccountId;
   private String name;
   private String type;
+  private Double currentAmount;
   private String accountNumber;
   private Currency IdCurrency;
   private Timestamp creationTimestamp;
