@@ -4,4 +4,3 @@ create table if not exists "transfer_history" (
     transfer_to bigint references "transaction"(id) on delete cascade,
     transfer_time timestamp default now()
 );
-
