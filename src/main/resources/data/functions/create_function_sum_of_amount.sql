@@ -3,14 +3,18 @@ create or replace function sumAmountOfGivenDate(
     seek_start timestamp,
     seek_end timestamp
 )
-returns double precision
+returns table (
+    total double precision,
+    types text
+)
 language plpgsql
 as
 $$
 BEGIN
-    select sum(account) as total, type from "transaction" where
+    return query
+    select sum(account)::double precision as total, "transaction".type::text from "transaction" where
         id = account and
         creation_timestamp between seek_start and seek_end
     group by type;
 end;
-$$
+$$;
