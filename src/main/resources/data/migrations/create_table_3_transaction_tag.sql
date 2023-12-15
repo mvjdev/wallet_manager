@@ -72,5 +72,17 @@ values
     ('Financial investments'),
     ('Realty'),
     ('Savings'),
-    ('Vehicles, chattels')
+    ('Vehicles, chattels'),
+    ('Income'),
+    ('Checks, coupons'),
+    ('Child Support'),
+    ('Dues & grants'),
+    ('Gifts'),
+    ('Interests, dividends'),
+    ('Lending, renting'),
+    ('Lottery, gambling'),
+    ('Refunds (tax, purchase)'),
+    ('Rental income'),
+    ('Sale'),
+    ('Wage, invoices')
 ;
