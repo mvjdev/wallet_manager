@@ -23,10 +23,10 @@ public class Account {
   )
   private Long accountId;
 
-  @Column(name="name")
+  @Column
   private String name;
 
-  @Column(name="type")
+  @Column
   private String type;
 
   @Column(name="current_amount", defaultValue="0")
