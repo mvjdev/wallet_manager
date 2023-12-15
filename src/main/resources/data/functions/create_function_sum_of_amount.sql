@@ -1,4 +1,4 @@
-create or replace function sumAmountOfGivenDate(
+create or replace function sumAmountOfGivenDateBy(
     account bigint,
     seek_start timestamp,
     seek_end timestamp
@@ -12,9 +12,12 @@ as
 $$
 BEGIN
     return query
-    select sum(account)::double precision as total, "transaction".type::text from "transaction" where
-        id = account and
+    select
+        coalesce(sum("transaction".amount), 0)::double precision as total,
+        "transaction".type::text as types
+    from "transaction" where
+        "transaction".id_account = account and
         creation_timestamp between seek_start and seek_end
     group by type;
-end;
+end
 $$;
