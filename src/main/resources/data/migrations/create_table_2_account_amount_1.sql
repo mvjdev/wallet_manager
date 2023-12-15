@@ -5,5 +5,5 @@ create table if not exists "account_amount" (
     transaction_time timestamp default now()
 );
 
-INSERT INTO "account_amount" (amount, account_id)
+INSERT INTO "account_amount" (amount, id_account)
 VALUES (500.75, 1), (300.25, 2), (700.00, 3);
