@@ -2,39 +2,27 @@ package project.wallet.configs;
 
 import java.sql.*;
 
-@Deprecated
 public class DbConnect {
-  public static final Connection CONNECTION;
+  private static final String URL = System.getenv("DATABASE_URL");
+  private static final String USERNAME = System.getenv("DATABASE_USERNAME");
+  private static final String PASSWORD = System.getenv("DATABASE_PASSWORD");
 
-  public static boolean isConnected() {
+  @Deprecated
+  public static Connection CONNECTION;
+  static {
     try {
-      return !CONNECTION.isClosed();
-    }catch (SQLException ignored){
+      CONNECTION = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    }catch (SQLException e){
+      System.out.println(e.getMessage());
     }
-    return false;
   }
 
-  private static String URL = "jdbc:postgresql://localhost:5432/wallet"; // default value
-  private static String USER = "prog_admin"; // default value
-  private static String PASSWORD = "123456"; // default value
-
-
-  static {
-    String url = System.getenv("PSQL_URL");
-    if(url != null) URL = url;
-
-    String user = System.getenv("PSQL_USER");
-    if(user != null) USER = user;
-
-    String password = System.getenv("PSQL_PASS");
-    if(password != null) PASSWORD = password;
-  }
-
+  public static PooledConnection POOL_CONNECTION;
   static {
     try {
-      CONNECTION = DriverManager.getConnection(URL, USER, PASSWORD);
+      POOL_CONNECTION = PooledConnection.create(URL, USERNAME, PASSWORD);
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      System.out.println(e.getMessage());
     }
   }
 }
