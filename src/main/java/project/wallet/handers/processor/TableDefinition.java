@@ -1,4 +1,4 @@
-package project.wallet.handlers.processor;
+package project.wallet.handers.processor;
 
 import lombok.*;
 import project.wallet.annotations.Column;
