@@ -32,23 +32,24 @@ public class AccountCrudOperations implements CrudOperations<Account> {
 
   private Account parseFound(ResultSet resultSet){
     try {
-      Account account = new Account()
-        .setId(resultSet.getLong("account_id"))
-        .setName(resultSet.getString("account_name"))
-        .setType(resultSet.getString("type"))
-        .setAccountNumber(resultSet.getString("account_number"))
-        ;
+      Currency currency = Currency
+              .builder()
+              .id(resultSet.getLong("currency_id"))
+              .name(resultSet.getString("currency_name"))
+              .country(resultSet.getString("currency_country"))
+              .build()
+      ;
       Timestamp timestamp = resultSet.getTimestamp("creation_timestamp");
-      if(timestamp != null) account.setCreationTimestamp(timestamp.toInstant());
-
-      Currency currency = new Currency()
-        .setId(resultSet.getLong("currency_id"))
-        .setName(resultSet.getString("currency_name"))
-        .setCountry(resultSet.getString("currency_country"))
-        ;
-
-      account.setCurrencyId(currency);
-      return account;
+      return Account
+              .builder()
+              .id(resultSet.getLong("account_id"))
+              .name(resultSet.getString("account_name"))
+              .type(resultSet.getString("type"))
+              .accountNumber(resultSet.getString("account_number"))
+              .creationTimestamp((timestamp != null) ? timestamp.toInstant() : null)
+              .currencyId(currency)
+              .build()
+      ;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
