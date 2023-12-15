@@ -66,5 +66,11 @@ values
     ('Fines'),
     ('Insurances'),
     ('Loan, interests'),
-    ('Taxes')
+    ('Taxes'),
+    ('Investments'),
+    ('Collections'),
+    ('Financial investments'),
+    ('Realty'),
+    ('Savings'),
+    ('Vehicles, chattels')
 ;
