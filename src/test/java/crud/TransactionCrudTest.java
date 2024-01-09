@@ -12,7 +12,8 @@ import java.sql.Timestamp;
 public class TransactionCrudTest {
     @Test
     public void testTransactionCreation() {
-        Transaction transaction = Transaction.builder()
+        Transaction transaction = Transaction
+                .builder()
                 .transactionId(1L)
                 .tagId(new TransactionTag(/*...*/))
                 .amount(100.0)
