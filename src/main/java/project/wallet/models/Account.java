@@ -18,8 +18,8 @@ import java.sql.Timestamp;
 public class Account {
   @Column(
       name="account_id",
-      identity = true,
-      generative= GenerativeValue.SEQUENCE
+      identity = true, /*Primary key*/
+      generative= GenerativeValue.SEQUENCE/*Serial = Sequence , uuid par defaut*/
   )
   private Long accountId;
 
